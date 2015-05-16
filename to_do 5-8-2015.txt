@@ -1,0 +1,7 @@
+Need to _draw_ slope image instead of slope segments
+Then need to have position of slope image move left (-) on the x axis
+   for every pixel the ball moves forward (+) on the x axis
+   
+
+Also need to work out alignment of pymunk slope segments on screen (screen size?)
+   and coordinate it with the slope image.  
