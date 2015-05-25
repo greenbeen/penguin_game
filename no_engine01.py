@@ -29,6 +29,7 @@ def main():
 
         screen.fill(THECOLORS['black'])
         ball.update_pos()
+        ball.collide()
         ball.draw()
 
         draw_slope(screen, slope_image)
@@ -43,24 +44,22 @@ class Ball(object):
         self.screen = screen
         self.x = x
         self.y = y
-        self.speed = 0
-        self.angle = 0
+        self.speed = 1
+        self.angle = 1.6
 
     def update_pos(self):
-        velx = 1
-        vely = 0
-        self.x += velx
-        self.y += vely
-        #return self.x, self.y
-
+        self.x += math.sin(self.angle) * self.speed
+        self.y -= math.cos(self.angle) * self.speed
 
     def draw(self):
+        pygame.draw.circle(self.screen, THECOLORS['red'], [int(self.x), int(self.y)], self.radius, 2)
 
-        pygame.draw.circle(self.screen, THECOLORS['red'], [self.x, self.y], self.radius, 2)
+    def collide(self):
+        pass
 
-
-
-
+    def get_pos(self):
+        '''Returns position of the bottom of the circle'''
+        return (self.x+self.radius, self.y+self.radius*2)
 
 def draw_slope(screen, image):
     pos = (0, 0)
