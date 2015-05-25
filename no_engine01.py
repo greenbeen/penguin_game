@@ -9,6 +9,16 @@ p_dict = {x:y for x,y in slope_points}
 
 screen_w = 1080
 screen_h = 720
+drag = 0.999
+elasticity = 0.75
+gravity = (math.pi, 0.02)
+
+def add_vectors((angle1, length1), (angle2, length2)):
+    x = math.sin(angle1) * length1 + math.sin(angle2) * length2
+    y = math.cos(angle1) * length1 + math.cos(angle2) * length2
+    angle = 0.5 * math.pi - math.atan2(y, x)
+    length = math.hypot(x, y)
+    return (angle, length)
 
 
 def main():
@@ -42,17 +52,20 @@ class Ball(object):
     def __init__(self, screen, radius=10, x=200, y=100):
         self.radius = radius
         self.screen = screen
+        self.thickness = 2
         self.x = x
         self.y = y
         self.speed = 1
         self.angle = 1.6
 
     def update_pos(self):
+        (self.angle, self.speed) = add_vectors((self.angle, self.speed), gravity)
         self.x += math.sin(self.angle) * self.speed
         self.y -= math.cos(self.angle) * self.speed
+        self.speed *= drag
 
     def draw(self):
-        pygame.draw.circle(self.screen, THECOLORS['red'], [int(self.x), int(self.y)], self.radius, 2)
+        pygame.draw.circle(self.screen, THECOLORS['red'], [int(self.x), int(self.y)], self.radius, self.thickness)
 
     def collide(self):
         pass
