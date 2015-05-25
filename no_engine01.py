@@ -28,8 +28,9 @@ def main():
                     running = False
 
         screen.fill(THECOLORS['black'])
+        ball.update_pos()
         ball.draw()
-        # draw_ball(screen, ball)
+
         draw_slope(screen, slope_image)
 
         pygame.display.flip()
@@ -42,26 +43,24 @@ class Ball(object):
         self.screen = screen
         self.x = x
         self.y = y
+        self.speed = 0
+        self.angle = 0
 
     def update_pos(self):
         velx = 1
         vely = 0
         self.x += velx
         self.y += vely
-        return self.x, self.y
+        #return self.x, self.y
 
 
     def draw(self):
-        self.update_pos()
+
         pygame.draw.circle(self.screen, THECOLORS['red'], [self.x, self.y], self.radius, 2)
 
 
 
 
-def draw_ball(screen, ball):
-    pos = (200, 200)
-    
-    pygame.draw.circle(screen, THECOLORS['red'], pos, ball.radius, 2)
 
 def draw_slope(screen, image):
     pos = (0, 0)
