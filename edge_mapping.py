@@ -4,6 +4,7 @@ import sys
 image_w = 3033
 image_h = 1000
 image = 'slope.jpg'
+detail = 50  #how many pixels do I want to increment by 1 pixel 5 pixels, etc.
 
 def main():
     pygame.init()
@@ -31,14 +32,18 @@ def main():
                 print "RGBA:", rgba
 
         while detecting:
+            r = screen.get_at((x,y))[0]
+            g = screen.get_at((x,y))[1]
+            b = screen.get_at((x,y))[2]
             try:
-                if screen.get_at((x, y)) == (0, 0, 0, 255) or screen.get_at((x,y)) == (8, 8 , 6, 255):
-                    y += 1
+                #if screen.get_at((x, y)) == (0, 0, 0, 255) or screen.get_at((x,y)) == (8, 8 , 6, 255):
+                if r < 10 and g < 10 and b < 10:
+                    y += detail
                 else:
                     edge_list.append((x,y))
                     print "RGB:", screen.get_at((x,y))
                     print "added to list:", x, y
-                    x += 1
+                    x += detail
                     y = 0
 
                 if x >= image_w-5:

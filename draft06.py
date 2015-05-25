@@ -7,7 +7,7 @@ import pymunk.pygame_util
 import math
 import slope_segments as ss
 
-screen_w = 3033
+screen_w = 1080 #3033
 screen_h = 720
 #edit_mode = False
 line_list = []
@@ -25,15 +25,22 @@ def main():
     # May need to set x and y gravity points seperately in case up and right are pressed together
     normal_grav = (0.0, -900.0)
     up_grav = (0.0, 900.0)
-    down_grav = (0.0, -1500.0)
+    down_grav = (0.0, -2000.0)
     left_grav = (-900.0, -900.0)
-    right_grav = (900.0, -900.0)
+    right_grav = (1000.0, -900.0)
+    slope_image = pygame.image.load('slope.jpg')
+    slope_position = (0, 0)
 
     space = pymunk.Space()
     space.gravity = normal_grav
 
     # lines = add_line(space)
-    balls = []
+    #balls = []
+    #new_ball = create_ball(space, (20, screen_h-20))
+    #balls.append(new_ball)
+
+    ball = create_ball(space, (200, screen_h-20))
+
     lines = add_line(space)
 
     while running:
@@ -69,19 +76,19 @@ def main():
                 elif event.key == K_RIGHT:
                     space.gravity = normal_grav
 
-            elif event.type == pygame.MOUSEBUTTONDOWN and edit_mode == False:
-                originalMousePos = pygame.mouse.get_pos()
-                #print "pygame pos:", originalMousePos
-                realPos = pymunk.pygame_util.to_pygame(originalMousePos, screen)
-                #print "converted:", realPos
-                new_ball = create_ball(space, realPos)
-                balls.append(new_ball)
+            # elif event.type == pygame.MOUSEBUTTONDOWN and edit_mode == False:
+            #     originalMousePos = pygame.mouse.get_pos()
+            #     #print "pygame pos:", originalMousePos
+            #     realPos = pymunk.pygame_util.to_pygame(originalMousePos, screen)
+            #     #print "converted:", realPos
+            #     new_ball = create_ball(space, realPos)
+            #     balls.append(new_ball)
 
-            elif event.type == pygame.MOUSEBUTTONDOWN and edit_mode == True:
-                originalMousePos = pygame.mouse.get_pos()
-                realPos = pymunk.pygame_util.to_pygame(originalMousePos, screen)
-                # print "realPos:", realPos
-                point_list.append(realPos)
+            # elif event.type == pygame.MOUSEBUTTONDOWN and edit_mode == True:
+            #     originalMousePos = pygame.mouse.get_pos()
+            #     realPos = pymunk.pygame_util.to_pygame(originalMousePos, screen)
+            #     # print "realPos:", realPos
+            #     point_list.append(realPos)
                 # print "point list:", point_list
 
                 if len(point_list) >= 2:  #you need a start point and stop point for line
@@ -91,19 +98,19 @@ def main():
 
         screen.fill(THECOLORS['black'])
 
-        balls_to_remove = []
-        for ball in balls:
-            if ball.body.position.y < 10:
-                balls_to_remove.append(ball)
-            draw_ball(screen, ball)
+        # balls_to_remove = []
+        # for ball in balls:
+        #     if ball.body.position.y < 10:
+        #         balls_to_remove.append(ball)
+        draw_ball(screen, ball)
 
-        for ball in balls_to_remove:
-            space.remove(ball, ball.body)
-            balls.remove(ball)
+        # for ball in balls_to_remove:
+        #     space.remove(ball, ball.body)
+        #     balls.remove(ball)
 
         if lines:
-            draw_lines(screen, lines)
-
+            #draw_lines(screen, lines)
+            draw_slope(screen, slope_image, slope_position, int(ball.body.position.x))
         space.step(1/50.0)
 
         pygame.display.flip()
@@ -112,46 +119,24 @@ def main():
 
 
 def create_ball(space, position):
-    mass = 1
-    radius = 20
+    mass = 100
+    radius = 10
     inertia = pymunk.moment_for_circle(mass, 0, radius, (0,0))
     body = pymunk.Body(mass, inertia)
     body.position = position
     shape = pymunk.Circle(body, radius, (0,0))
-    shape.elasticity = 0.2
-    shape.friction = 0.08
+    shape.elasticity = .1
+    shape.friction = 1
     space.add(body, shape)
     return shape
 
 def draw_ball(screen, ball):
-    pos = int(ball.body.position.x), screen_h-int(ball.body.position.y)
+    pos = (200, screen_h-int(ball.body.position.y))
+    # pos = int(ball.body.position.x), screen_h-int(ball.body.position.y)
     #print "draw pos:", pos
     pygame.draw.circle(screen, THECOLORS['red'], pos, int(ball.radius), 2)
     # screen.blit(image, pos)
 
-        ## This is a predefined set of three lines
-# def add_line(space):
-#     body = pymunk.Body()
-#     body.position = (0, 0)
-#     line_shape1 = pymunk.Segment(body, (50, 500), (300, 50), 10)
-#     line_shape2 = pymunk.Segment(body, (300, 50), (550, 50), 10)
-#     line_shape3 = pymunk.Segment(body, (550, 50), (600, 200), 10)
-#     line_shape1.elasticity = 1
-#     line_shape2.elasticity = 1
-#     line_shape3.elasticity = 1
-#     space.add(line_shape1, line_shape2, line_shape3)
-#     return [line_shape1, line_shape2, line_shape3]
-
-# def add_line(space, input_list):
-    # ## print "input_list:", input
-    # ## print "input0:", input_list[0], "input1:", input_list[1]
-    # body = pymunk.Body()
-    # body.position = (0, 0)
-    # line = pymunk.Segment(body, input_list[0], input_list[1], 10)
-    # line.elasticity = 1
-    # space.add(line)
-    # line_list.append(line)
-    # return line_list
 
 def add_line(space):
         ## This section works if input list is a like the line below, multiple lines in one list
@@ -162,19 +147,28 @@ def add_line(space):
         # print "input0:", input[0], "input1:", input[1]
         body = pymunk.Body()
         body.position = (0, 0)
-        line = pymunk.Segment(body, input[0], input[1], 1)
-        line.elasticity = 1
+        line = pymunk.Segment(body, input[0], input[1], 2)
+        line.elasticity = .1
+        line.friction = 1
         space.add(line)
         line_list.append(line)
     return line_list
 
-def draw_lines(screen, lines):
-    for line in lines:
-        pymunk.pygame_util.draw(screen, line)
-        # body = line.body
-        # p1 = to_pygame(line.a)
-        # p2 = to_pygame(line.b)
-        # pygame.draw.lines(screen, THECOLORS['blue'], False, [p1,p2], 11)
+def draw_slope(screen, image, slope_pos, ball_x):
+    if ball_x >= 200:
+        slope_x = slope_pos[0]-ball_x+200
+    else: 
+        slope_x = slope_pos[0]
+    slope_y = slope_pos[1]
+    screen.blit(image, (slope_x, slope_y))
+
+    ## This section is to draw pymunk's physical lines instead of slope image that matches it
+# def draw_lines(screen, lines):
+    # for line in lines:
+    #     body = line.body
+    #     p1 = to_pygame(line.a)
+    #     p2 = to_pygame(line.b)
+    #     pygame.draw.lines(screen, THECOLORS['blue'], False, [p1,p2], 10)
 
 def to_pygame(p):
     """Small hack to convert pymunk to pygame coordinates"""

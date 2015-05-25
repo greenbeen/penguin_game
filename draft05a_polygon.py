@@ -29,7 +29,7 @@ def main():
     left_grav = (-900.0, -900.0)
     right_grav = (900.0, -900.0)
     slope_image = pygame.image.load('slope.jpg')
-    slope_position = (0, 195)
+    slope_position = (0, 0)
 
     space = pymunk.Space()
     space.gravity = normal_grav
@@ -109,6 +109,8 @@ def main():
         #     space.remove(ball, ball.body)
         #     balls.remove(ball)
 
+        draw_poly(screen, poly)
+
         if lines:
             #draw_lines(screen, lines)
             draw_slope(screen, slope_image, slope_position, int(ball.body.position.x))
@@ -165,9 +167,9 @@ def draw_ball(screen, ball):
 
 def add_poly(space):
     body = pymunk.Body()
-    body.position = (0, 0)
+    body.position = (400, 100)
     vertices = [(-100,-100), (100,-100), (100,100), (-100, 100)]
-    poly = pymunk.Segment(body, vertices, (0,0), 0.0)
+    poly = pymunk.Poly(body, vertices, (0,0), 1)
     space.add(poly)
     return poly
 
@@ -194,6 +196,9 @@ def draw_slope(screen, image, slope_pos, ball_x):
         slope_x = slope_pos[0]
     slope_y = slope_pos[1]
     screen.blit(image, (slope_x, slope_y))
+
+def draw_poly(screen, poly):
+    pass
 
     ## This section is to draw pymunk's physical lines instead of slope image that matches it
 # def draw_lines(screen, lines):

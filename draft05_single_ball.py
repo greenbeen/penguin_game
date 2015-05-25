@@ -172,6 +172,7 @@ def add_line(space):
         body.position = (0, 0)
         line = pymunk.Segment(body, input[0], input[1], 1)
         line.elasticity = 1
+        line.friction = 1
         space.add(line)
         line_list.append(line)
     return line_list
