@@ -22,6 +22,7 @@ def add_vectors((angle1, length1), (angle2, length2)):
 
 
 def main():
+    global gravity
     pygame.init
     screen = pygame.display.set_mode((screen_w, screen_h))
     clock = pygame.time.Clock()
@@ -36,6 +37,11 @@ def main():
             elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     running = False
+                elif event.key == K_DOWN:
+                    gravity = (math.pi, 0.2)
+            elif event.type == KEYUP:
+                if event.key == K_DOWN:
+                    gravity = (math.pi, 0.02)
 
         screen.fill(THECOLORS['black'])
         ball.update_pos()
@@ -68,8 +74,12 @@ class Ball(object):
         pygame.draw.circle(self.screen, THECOLORS['red'], [int(self.x), int(self.y)], self.radius, self.thickness)
 
     def collide(self):
-        pass
+        y = self.get_pos()[1]
+        x = self.get_pos()[0]
+        if y >= p_dict[int(x)]:
+            self.y = p_dict[int(x)]
 
+    ## This might need some work ##
     def get_pos(self):
         '''Returns position of the bottom of the circle'''
         return (self.x+self.radius, self.y+self.radius*2)

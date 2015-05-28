@@ -5,7 +5,7 @@ from pygame.color import *
 import pymunk
 import pymunk.pygame_util
 import math
-import slope_segments as ss
+import pymunk_slope_segments as pss
 
 screen_w = 1080 #3033
 screen_h = 720
@@ -119,8 +119,8 @@ def main():
 
 
 def create_ball(space, position):
-    mass = 100
-    radius = 10
+    mass = 10
+    radius = 20
     inertia = pymunk.moment_for_circle(mass, 0, radius, (0,0))
     body = pymunk.Body(mass, inertia)
     body.position = position
@@ -141,7 +141,7 @@ def draw_ball(screen, ball):
 def add_line(space):
         ## This section works if input list is a like the line below, multiple lines in one list
     # input_list = [ [(50, 500), (300, 50)], [(300, 50), (550, 50)], [(550, 50), (600, 200)] ]
-    input_list = ss.pymunk_segments
+    input_list = pss.pymunk_slope_segments
     for input in input_list:
         # print "input:", input
         # print "input0:", input[0], "input1:", input[1]
