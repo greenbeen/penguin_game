@@ -28,7 +28,7 @@ def main():
     down_grav = (0.0, -2000.0)
     left_grav = (-900.0, -900.0)
     right_grav = (1000.0, -900.0)
-    slope_image = pygame.image.load('slope.jpg')
+    slope_image = pygame.image.load('slope2_black.png')
     slope_position = (0, 0)
 
     space = pymunk.Space()
@@ -102,7 +102,7 @@ def main():
         # for ball in balls:
         #     if ball.body.position.y < 10:
         #         balls_to_remove.append(ball)
-        draw_ball(screen, ball)
+        #draw_ball(screen, ball)
 
         # for ball in balls_to_remove:
         #     space.remove(ball, ball.body)
@@ -111,6 +111,8 @@ def main():
         if lines:
             #draw_lines(screen, lines)
             draw_slope(screen, slope_image, slope_position, int(ball.body.position.x))
+
+        draw_ball(screen, ball)
         space.step(1/50.0)
 
         pygame.display.flip()

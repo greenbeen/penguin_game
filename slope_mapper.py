@@ -2,9 +2,9 @@ import pygame
 import sys
 
 # manually input image dimensions and filename
-image_w = 3033
-image_h = 1000
-image = 'slope.jpg'
+image_w = 6451 #3033
+image_h = 720 #1000
+image = 'slope2_black.png'
 screen_h = 720  #height of display screen for final game
 detail = 10  #how many pixels do I want to increment by 1 pixel 5 pixels, etc.
 
